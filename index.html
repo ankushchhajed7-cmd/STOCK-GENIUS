@@ -216,7 +216,7 @@ const LS = {
   stock:'sg_key_stock', gem:'sg_key_gem', proxy:'sg_key_proxy'
 };
 const STOCK_BASE = 'https://stock.indianapi.in';
-const GEM_MODELS = ['gemini-2.5-flash','gemini-2.0-flash','gemini-1.5-flash']; // tries in order
+const GEM_MODELS = ['gemini-3.5-flash','gemini-3-flash','gemini-2.5-flash']; // tries in order (2026)
 const CHIPS = ['RELIANCE','TCS','INFY','HDFCBANK','SBIN','TATAMOTORS','ITC','ADANIENT'];
 
 const $ = s => document.querySelector(s);
@@ -399,7 +399,7 @@ async function gemini(prompt){
       if(r.status===429||r.status===503) continue;
       if(!r.ok) continue;
       const j=await r.json();
-      const t=j?.candidates?.[0]?.content?.parts?.map(p=>p.text).join('')||'';
+      const t=(j?.candidates?.[0]?.content?.parts||[]).filter(p=>p&&p.text).map(p=>p.text).join('')||'';
       if(t) return t;
     }catch(e){ continue; }
   }
