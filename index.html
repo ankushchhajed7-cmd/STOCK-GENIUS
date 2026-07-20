@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0a0a0a">
+<title>STOCK GENIUS · Analyzer</title>
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Stock Genius">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230a0a0a'/><text y='72' x='50' font-size='64' text-anchor='middle' fill='%23ffb000' font-family='monospace'>₹</text></svg>">
+<style>
+  :root{
+    --bg:#0a0a0a; --panel:#111110; --panel2:#161513; --line:#2a2620;
+    --amber:#ffb000; --amber-dim:#b87d00; --ink:#e8e0d0; --mute:#8a7f6a;
+    --green:#3ecf7a; --red:#ff5252; --yellow:#ffd24a;
+    --mono:'SF Mono',ui-monospace,'JetBrains Mono',Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--mono);
+    font-size:14px;line-height:1.45;-webkit-text-size-adjust:100%}
+  body{max-width:560px;margin:0 auto;padding:0 0 90px;min-height:100vh}
+  a{color:var(--amber)}
+  .scanline{position:fixed;inset:0;pointer-events:none;z-index:99;opacity:.035;
+    background:repeating-linear-gradient(0deg,#fff 0 1px,transparent 1px 3px)}
+
+  header{position:sticky;top:0;z-index:20;background:linear-gradient(180deg,#0a0a0a,#0a0a0af2);
+    border-bottom:1px solid var(--line);padding:12px 14px 10px}
+  .brand{display:flex;align-items:baseline;gap:8px}
+  .brand h1{margin:0;font-size:15px;letter-spacing:2px;color:var(--amber);font-weight:700}
+  .brand .v{font-size:10px;color:var(--mute);letter-spacing:1px}
+  .brand .gear{color:var(--mute);font-size:18px;cursor:pointer;
+    padding:2px 6px;border:1px solid var(--line);border-radius:6px;line-height:1}
+  .brand .gear:active{color:var(--amber);border-color:var(--amber-dim)}
+  .brand .spacer{margin-left:auto}
+  .installbtn{display:none;align-items:center;gap:5px;background:transparent;color:var(--amber);
+    border:1px solid var(--amber-dim);border-radius:6px;font-family:var(--mono);font-size:10.5px;
+    font-weight:700;letter-spacing:1px;padding:5px 9px;cursor:pointer}
+  .installbtn.on{display:inline-flex}
+  .installbtn:active{background:var(--amber);color:#000}
+  /* iOS install hint banner */
+  .ios-hint{display:none;margin:10px 14px 0;background:var(--panel2);border:1px solid var(--amber-dim);
+    border-radius:8px;padding:10px 12px;font-size:11.5px;color:var(--ink);line-height:1.5}
+  .ios-hint.on{display:block}
+  .ios-hint b{color:var(--amber)}
+  .ios-hint .x{float:right;color:var(--mute);cursor:pointer;font-size:14px;margin-left:8px}
+
+  .searchbar{display:flex;gap:8px;margin-top:10px}
+  .searchbar input{flex:1;background:#000;border:1px solid var(--line);color:var(--amber);
+    font-family:var(--mono);font-size:15px;padding:11px 12px;border-radius:8px;
+    letter-spacing:1px;text-transform:uppercase;outline:none}
+  .searchbar input::placeholder{color:#4a453a;letter-spacing:0}
+  .searchbar input:focus{border-color:var(--amber-dim)}
+  .searchbar button{background:var(--amber);color:#000;border:0;font-family:var(--mono);
+    font-weight:700;padding:0 16px;border-radius:8px;letter-spacing:1px;cursor:pointer}
+  .searchbar button:active{background:var(--amber-dim)}
+  .chips{display:flex;gap:6px;margin-top:8px;overflow-x:auto;-ms-overflow-style:none;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{white-space:nowrap;font-size:11px;color:var(--mute);border:1px solid var(--line);
+    padding:4px 9px;border-radius:20px;cursor:pointer;background:var(--panel)}
+  .chip:active{color:var(--amber);border-color:var(--amber-dim)}
+
+  main{padding:14px}
+  .hint{color:var(--mute);font-size:12.5px;text-align:center;padding:40px 20px;line-height:1.7}
+  .hint b{color:var(--amber)}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+    margin-bottom:12px;overflow:hidden}
+  .card-h{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid var(--line);
+    background:var(--panel2)}
+  .card-h .lbl{font-size:10px;letter-spacing:2px;color:var(--amber-dim);font-weight:700;text-transform:uppercase}
+  .card-h .lbl::before{content:"▎";color:var(--amber);margin-right:4px}
+  .card-b{padding:12px}
+
+  /* header quote */
+  .q-name{font-size:16px;color:var(--ink);font-weight:700;letter-spacing:.3px;line-height:1.2}
+  .q-sub{font-size:11px;color:var(--mute);margin-top:2px;letter-spacing:.5px}
+  .q-row{display:flex;align-items:flex-end;gap:12px;margin-top:10px;flex-wrap:wrap}
+  .q-price{font-size:30px;font-weight:700;color:var(--amber);letter-spacing:.5px;line-height:1}
+  .q-chg{font-size:14px;font-weight:700;padding-bottom:3px}
+  .up{color:var(--green)} .down{color:var(--red)}
+  .exch{margin-left:auto;text-align:right;font-size:10px;color:var(--mute);letter-spacing:1px}
+
+  /* verdict pill */
+  .verdict{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px 12px;
+    border-radius:8px;border:1px solid var(--line);background:#000}
+  .v-dot{width:10px;height:10px;border-radius:50%;flex:none;box-shadow:0 0 8px currentColor}
+  .v-txt{font-size:13px;font-weight:700;letter-spacing:1px}
+  .v-score{margin-left:auto;font-size:11px;color:var(--mute)}
+  .v-score b{color:var(--ink);font-size:14px}
+
+  canvas{width:100%;display:block;border-radius:6px}
+
+  /* grid stats */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border-radius:8px;overflow:hidden}
+  .grid.g3{grid-template-columns:1fr 1fr 1fr}
+  .cell{background:var(--panel);padding:9px 10px}
+  .cell .k{font-size:9.5px;color:var(--mute);letter-spacing:1px;text-transform:uppercase}
+  .cell .val{font-size:15px;color:var(--ink);font-weight:700;margin-top:3px;letter-spacing:.3px}
+  .cell .val.sm{font-size:13px}
+
+  .tline{display:flex;justify-content:space-between;align-items:center;padding:8px 2px;border-bottom:1px solid var(--line)}
+  .tline:last-child{border-bottom:0}
+  .tline .tk{font-size:12px;color:var(--mute);letter-spacing:.5px}
+  .tline .tv{font-size:13px;font-weight:700;letter-spacing:.5px}
+  .badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;letter-spacing:.5px}
+  .b-buy{background:#0d2a19;color:var(--green)} .b-sell{background:#2a0d0d;color:var(--red)}
+  .b-neu{background:#2a2410;color:var(--yellow)}
+
+  .news-item{padding:9px 0;border-bottom:1px solid var(--line)}
+  .news-item:last-child{border-bottom:0}
+  .news-item .nh{font-size:12.5px;color:var(--ink);line-height:1.4}
+  .news-item .nm{display:flex;align-items:center;gap:8px;margin-top:5px}
+  .news-item .nd{font-size:10px;color:var(--mute)}
+
+  .ai-box{white-space:pre-wrap;font-size:13px;line-height:1.65;color:var(--ink)}
+  .ai-box em{color:var(--amber);font-style:normal;font-weight:700}
+
+  .raw{font-size:10px;color:var(--mute);word-break:break-all;max-height:180px;overflow:auto;
+    background:#000;padding:8px;border-radius:6px;white-space:pre-wrap}
+  details summary{cursor:pointer;color:var(--mute);font-size:11px;letter-spacing:1px;padding:4px 0}
+
+  .disclaimer{font-size:10px;color:#6a6252;text-align:center;padding:16px 20px 0;line-height:1.6}
+
+  /* loader */
+  .loader{text-align:center;padding:44px 0;color:var(--amber-dim);font-size:12px;letter-spacing:2px}
+  .loader .bar{height:2px;background:var(--line);margin:14px auto 0;max-width:220px;overflow:hidden;border-radius:2px}
+  .loader .bar i{display:block;height:100%;width:40%;background:var(--amber);animation:sweep 1s infinite ease-in-out}
+  @keyframes sweep{0%{margin-left:-40%}100%{margin-left:100%}}
+  .err{color:var(--red);font-size:12px;background:#1a0d0d;border:1px solid #3a1515;padding:12px;border-radius:8px;line-height:1.5}
+
+  /* settings sheet */
+  .sheet-bg{position:fixed;inset:0;background:#000000cc;z-index:40;display:none}
+  .sheet-bg.on{display:block}
+  .sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;max-width:560px;margin:0 auto;
+    background:var(--panel);border-top:1px solid var(--amber-dim);border-radius:16px 16px 0 0;
+    padding:16px 16px 26px;transform:translateY(100%);transition:transform .22s ease}
+  .sheet.on{transform:translateY(0)}
+  .sheet h2{margin:0 0 4px;font-size:13px;letter-spacing:2px;color:var(--amber)}
+  .sheet p.s{font-size:11px;color:var(--mute);margin:0 0 14px}
+  .fld{margin-bottom:12px}
+  .fld label{display:block;font-size:10px;color:var(--mute);letter-spacing:1px;margin-bottom:5px;text-transform:uppercase}
+  .fld input{width:100%;background:#000;border:1px solid var(--line);color:var(--amber);
+    font-family:var(--mono);font-size:13px;padding:10px;border-radius:8px;outline:none}
+  .fld input:focus{border-color:var(--amber-dim)}
+  .fld .h{font-size:10px;color:#6a6252;margin-top:4px}
+  .sheet .save{width:100%;background:var(--amber);color:#000;border:0;font-family:var(--mono);
+    font-weight:700;padding:13px;border-radius:9px;letter-spacing:1px;margin-top:4px;font-size:14px}
+  .sheet .save:active{background:var(--amber-dim)}
+</style>
+</head>
+<body>
+<div class="scanline"></div>
+
+<header>
+  <div class="brand">
+    <h1>STOCK GENIUS</h1><span class="v">ANALYZER v1.0</span>
+    <span class="spacer"></span>
+    <button class="installbtn" id="installBtn">⤓ INSTALL</button>
+    <span class="gear" id="gear">⚙</span>
+  </div>
+  <div class="ios-hint" id="iosHint">
+    <span class="x" id="iosX">✕</span>
+    Install karne ke liye: <b>Share</b> ⎋ dabaa → <b>Add to Home Screen</b>.
+  </div>
+  <div class="searchbar">
+    <input id="q" placeholder="Symbol ya naam (RELIANCE)" autocomplete="off" autocapitalize="characters" spellcheck="false">
+    <button id="go">SCAN</button>
+  </div>
+  <div class="chips" id="chips"></div>
+</header>
+
+<main id="main">
+  <div class="hint">
+    <b>STOCK GENIUS ANALYZER</b><br><br>
+    Kisi bhi NSE/BSE stock ka naam daal ke <b>SCAN</b> dabaa.<br>
+    Price · Technicals · Fundamentals · Promoter Holding · News + AI summary — ek screen pe.<br><br>
+    Pehli baar? ⚙ me apni <b>indianapi.in</b> aur <b>Gemini</b> key daal de.
+  </div>
+</main>
+
+<div class="disclaimer">
+  Personal analysis tool. Ye koi investment advice nahi hai — sabhi signals sirf tere apne research ke liye.
+</div>
+
+<!-- Settings -->
+<div class="sheet-bg" id="sheetbg"></div>
+<div class="sheet" id="sheet">
+  <h2>⚙ SETTINGS</h2>
+  <p class="s">Keys tere device pe hi rehti hain (localStorage). Kahin bheji nahi jaati.</p>
+  <div class="fld">
+    <label>indianapi.in API Key</label>
+    <input id="k_stock" placeholder="sk-..." autocomplete="off" spellcheck="false">
+    <div class="h">indianapi.in → free signup → Dashboard → API Key</div>
+  </div>
+  <div class="fld">
+    <label>Gemini API Key (AI summary + news)</label>
+    <input id="k_gem" placeholder="AIza..." autocomplete="off" spellcheck="false">
+    <div class="h">aistudio.google.com → Get API key. Khaali chhoda toh AI parts skip ho jaayenge.</div>
+  </div>
+  <div class="fld">
+    <label>CORS Proxy (Yahoo OHLC fallback ke liye)</label>
+    <input id="k_proxy" placeholder="https://corsproxy.io/?url=" autocomplete="off" spellcheck="false">
+    <div class="h">Agar indianapi se candle na mile toh isse Yahoo se OHLC aata hai.</div>
+  </div>
+  <button class="save" id="save">SAVE</button>
+</div>
+
+<script>
+"use strict";
+/* ---------- config / storage ---------- */
+const LS = {
+  stock:'sg_key_stock', gem:'sg_key_gem', proxy:'sg_key_proxy'
+};
+const STOCK_BASE = 'https://stock.indianapi.in';
+const GEM_MODELS = ['gemini-2.5-flash','gemini-2.0-flash','gemini-1.5-flash']; // tries in order
+const CHIPS = ['RELIANCE','TCS','INFY','HDFCBANK','SBIN','TATAMOTORS','ITC','ADANIENT'];
+
+const $ = s => document.querySelector(s);
+const el = (t,c)=>{const e=document.createElement(t);if(c)e.className=c;return e;};
+const get = k => localStorage.getItem(k) || '';
+const fmt = (n,d=2)=> (n===null||n===undefined||isNaN(n))?'—':Number(n).toLocaleString('en-IN',{maximumFractionDigits:d});
+
+/* multi-path safe getter: try each dotted path, return first defined */
+function pick(obj, paths){
+  for(const p of paths){
+    let cur=obj, ok=true;
+    for(const part of p.split('.')){
+      if(cur==null){ok=false;break;}
+      cur=cur[part];
+    }
+    if(ok && cur!==undefined && cur!==null && cur!=='') return cur;
+  }
+  return undefined;
+}
+const numOf = v => { if(v==null) return NaN; const n=parseFloat(String(v).replace(/[,%₹\s]/g,'')); return isNaN(n)?NaN:n; };
+
+/* ---------- settings sheet ---------- */
+function openSheet(){ $('#k_stock').value=get(LS.stock); $('#k_gem').value=get(LS.gem);
+  $('#k_proxy').value=get(LS.proxy); $('#sheetbg').classList.add('on'); $('#sheet').classList.add('on'); }
+function closeSheet(){ $('#sheetbg').classList.remove('on'); $('#sheet').classList.remove('on'); }
+$('#gear').onclick=openSheet; $('#sheetbg').onclick=closeSheet;
+$('#save').onclick=()=>{
+  localStorage.setItem(LS.stock,$('#k_stock').value.trim());
+  localStorage.setItem(LS.gem,$('#k_gem').value.trim());
+  localStorage.setItem(LS.proxy,$('#k_proxy').value.trim());
+  closeSheet();
+};
+
+/* chips */
+const chipWrap=$('#chips');
+CHIPS.forEach(c=>{ const b=el('div','chip'); b.textContent=c; b.onclick=()=>{ $('#q').value=c; run(); }; chipWrap.appendChild(b); });
+
+/* ---------- API calls ---------- */
+async function apiStock(name){
+  const key=get(LS.stock);
+  if(!key) throw new Error('indianapi.in key nahi hai. ⚙ me daal de.');
+  const url=`${STOCK_BASE}/stock?name=${encodeURIComponent(name)}`;
+  const r=await fetch(url,{headers:{'X-Api-Key':key}});
+  if(r.status===401||r.status===403) throw new Error('API key galat ya plan me ye endpoint allowed nahi.');
+  if(r.status===429) throw new Error('Rate limit / credits khatam (429). Thodi der baad try kar.');
+  if(!r.ok) throw new Error('Stock API error: HTTP '+r.status);
+  return r.json();
+}
+async function apiHistorical(name){
+  const key=get(LS.stock);
+  const url=`${STOCK_BASE}/historical_data?stock_name=${encodeURIComponent(name)}&period=1yr&filter=price`;
+  try{
+    const r=await fetch(url,{headers:{'X-Api-Key':key}});
+    if(!r.ok) return null;
+    const j=await r.json();
+    // try to find an array of {date, price/value}
+    const ds = j?.datasets?.[0]?.values || j?.values || j?.data || j?.dataset || null;
+    if(Array.isArray(ds) && ds.length){
+      return ds.map(row=>{
+        if(Array.isArray(row)) return {t:row[0], c:numOf(row[1])};
+        return {t:row.date||row.Date||row.t, c:numOf(row.price??row.value??row.close??row.c)};
+      }).filter(p=>!isNaN(p.c));
+    }
+  }catch(e){}
+  return null;
+}
+async function yahooOHLC(sym){
+  const proxy=get(LS.proxy);
+  const base=`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}.NS?range=1y&interval=1d`;
+  const url = proxy ? proxy + encodeURIComponent(base) : base;
+  try{
+    const r=await fetch(url); if(!r.ok) return null;
+    const j=await r.json();
+    const res=j?.chart?.result?.[0]; if(!res) return null;
+    const q=res.indicators?.quote?.[0]||{};
+    const out=[];
+    (res.timestamp||[]).forEach((t,i)=>{
+      const c=q.close?.[i], h=q.high?.[i], l=q.low?.[i];
+      if(c!=null) out.push({t:t*1000, c, h:h??c, l:l??c});
+    });
+    return out.length?out:null;
+  }catch(e){ return null; }
+}
+
+/* ---------- technical indicators (client-side) ---------- */
+function ema(arr,p){ const k=2/(p+1); let e=arr[0], out=[e];
+  for(let i=1;i<arr.length;i++){ e=arr[i]*k+e*(1-k); out.push(e);} return out; }
+function rsi(closes,p=14){
+  if(closes.length<p+1) return NaN;
+  let g=0,l=0;
+  for(let i=1;i<=p;i++){ const d=closes[i]-closes[i-1]; d>=0?g+=d:l-=d; }
+  g/=p; l/=p;
+  for(let i=p+1;i<closes.length;i++){ const d=closes[i]-closes[i-1];
+    g=(g*(p-1)+(d>0?d:0))/p; l=(l*(p-1)+(d<0?-d:0))/p; }
+  if(l===0) return 100;
+  return 100-100/(1+g/l);
+}
+function macd(closes){
+  if(closes.length<35) return null;
+  const e12=ema(closes,12), e26=ema(closes,26);
+  const line=closes.map((_,i)=>e12[i]-e26[i]);
+  const sig=ema(line.slice(26),9);
+  const m=line[line.length-1], s=sig[sig.length-1];
+  return {macd:m, signal:s, hist:m-s};
+}
+function supertrend(ohlc,p=10,mult=3){
+  if(ohlc.length<p+2) return null;
+  const atr=[]; let prevAtr;
+  for(let i=0;i<ohlc.length;i++){
+    const h=ohlc[i].h, l=ohlc[i].l, pc=i?ohlc[i-1].c:ohlc[i].c;
+    const tr=Math.max(h-l,Math.abs(h-pc),Math.abs(l-pc));
+    if(i<p){ atr.push(NaN); if(i===p-1){ let s=0; for(let j=0;j<p;j++)s+=Math.max(ohlc[j].h-ohlc[j].l,0); prevAtr=s/p; atr[i]=prevAtr;} }
+    else { prevAtr=(prevAtr*(p-1)+tr)/p; atr.push(prevAtr); }
+  }
+  let dir=1, st=ohlc[p].c;
+  for(let i=p;i<ohlc.length;i++){
+    const mid=(ohlc[i].h+ohlc[i].l)/2, a=atr[i]||prevAtr;
+    const up=mid-mult*a, dn=mid+mult*a;
+    if(ohlc[i].c>st) dir=1; else if(ohlc[i].c<st) dir=-1;
+    st = dir===1?up:dn;
+  }
+  return {dir, level:st};
+}
+function supportResistance(ohlc){
+  const n=ohlc.length; if(n<20) return {s:NaN,r:NaN};
+  const win=ohlc.slice(-40);
+  return {s:Math.min(...win.map(o=>o.l)), r:Math.max(...win.map(o=>o.h))};
+}
+
+/* ---------- render helpers ---------- */
+function verdictFrom(sc){ // sc 0..100
+  if(sc>=70) return {t:'STRONG BULLISH',cl:'up',dot:'var(--green)'};
+  if(sc>=57) return {t:'BULLISH',cl:'up',dot:'var(--green)'};
+  if(sc>=43) return {t:'NEUTRAL',cl:'',dot:'var(--yellow)'};
+  if(sc>=30) return {t:'BEARISH',cl:'down',dot:'var(--red)'};
+  return {t:'STRONG BEARISH',cl:'down',dot:'var(--red)'};
+}
+function card(lbl,bodyNode){
+  const c=el('div','card'); const h=el('div','card-h');
+  const s=el('span','lbl'); s.textContent=lbl; h.appendChild(s); c.appendChild(h);
+  const b=el('div','card-b'); b.appendChild(bodyNode); c.appendChild(b); return c;
+}
+function statGrid(items,g3){
+  const g=el('div',g3?'grid g3':'grid');
+  items.forEach(([k,v,cl])=>{ const cell=el('div','cell');
+    const kk=el('div','k'); kk.textContent=k;
+    const vv=el('div','val'+(cl?' '+cl:''));
+    vv.textContent=v; if(String(v).length>10) vv.classList.add('sm');
+    cell.appendChild(kk); cell.appendChild(vv); g.appendChild(cell); });
+  return g;
+}
+function drawChart(canvas,pts){
+  const dpr=window.devicePixelRatio||1, W=canvas.clientWidth, H=110;
+  canvas.width=W*dpr; canvas.height=H*dpr; canvas.style.height=H+'px';
+  const ctx=canvas.getContext('2d'); ctx.scale(dpr,dpr); ctx.clearRect(0,0,W,H);
+  if(!pts||pts.length<2) return;
+  const ys=pts.map(p=>p.c), mn=Math.min(...ys), mx=Math.max(...ys), rng=(mx-mn)||1;
+  const X=i=>i/(pts.length-1)*(W-2)+1, Y=v=>H-6-((v-mn)/rng)*(H-12);
+  const up=ys[ys.length-1]>=ys[0];
+  const col=up?'#3ecf7a':'#ff5252';
+  const grad=ctx.createLinearGradient(0,0,0,H);
+  grad.addColorStop(0,up?'rgba(62,207,122,.25)':'rgba(255,82,82,.25)');
+  grad.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.beginPath(); ctx.moveTo(X(0),Y(ys[0]));
+  pts.forEach((p,i)=>ctx.lineTo(X(i),Y(p.c)));
+  ctx.lineTo(X(pts.length-1),H); ctx.lineTo(X(0),H); ctx.closePath(); ctx.fillStyle=grad; ctx.fill();
+  ctx.beginPath(); ctx.moveTo(X(0),Y(ys[0]));
+  pts.forEach((p,i)=>ctx.lineTo(X(i),Y(p.c)));
+  ctx.strokeStyle=col; ctx.lineWidth=1.6; ctx.stroke();
+}
+
+/* ---------- Gemini ---------- */
+async function gemini(prompt){
+  const key=get(LS.gem); if(!key) return null;
+  for(const model of GEM_MODELS){
+    try{
+      const url=`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
+      const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({contents:[{parts:[{text:prompt}]}]})});
+      if(r.status===429||r.status===503) continue;
+      if(!r.ok) continue;
+      const j=await r.json();
+      const t=j?.candidates?.[0]?.content?.parts?.map(p=>p.text).join('')||'';
+      if(t) return t;
+    }catch(e){ continue; }
+  }
+  return null;
+}
+
+/* ---------- main run ---------- */
+async function run(){
+  const name=$('#q').value.trim();
+  if(!name) return;
+  $('#q').blur();
+  const main=$('#main');
+  main.innerHTML='<div class="loader">SCANNING '+name.toUpperCase()+' …<div class="bar"><i></i></div></div>';
+
+  let data;
+  try{ data=await apiStock(name); }
+  catch(e){ main.innerHTML='<div class="err">⚠ '+e.message+'</div>'; return; }
+
+  // OHLC: try indianapi historical -> yahoo fallback
+  let ohlc=null;
+  const hist=await apiHistorical(name);
+  if(hist && hist.length>30){ ohlc=hist.map(p=>({t:p.t,c:p.c,h:p.c,l:p.c})); }
+  if(!ohlc){
+    const ysym = (pick(data,['nseScriptCode','symbol','tickerId'])||name).toString().replace(/\.(NS|BO)$/,'');
+    const y=await yahooOHLC(ysym);
+    if(y) ohlc=y;
+  }
+
+  render(name,data,ohlc);
+}
+
+function render(name,data,ohlc){
+  const main=$('#main'); main.innerHTML='';
+
+  /* --- quote --- */
+  const cname = pick(data,['companyName','company','companyProfile.companyName']) || name.toUpperCase();
+  const industry = pick(data,['industry','companyProfile.mgIndustry','companyProfile.industry']) || '';
+  const nse = numOf(pick(data,['currentPrice.NSE','currentPrice.nse','stockDetailsReusableData.price','price']));
+  const bse = numOf(pick(data,['currentPrice.BSE','currentPrice.bse']));
+  const price = !isNaN(nse)?nse:bse;
+  const pct = numOf(pick(data,['percentChange','stockDetailsReusableData.percentChange','pChange']));
+  const yh = numOf(pick(data,['yearHigh','stockDetailsReusableData.yearHigh','high52']));
+  const yl = numOf(pick(data,['yearLow','stockDetailsReusableData.yearLow','low52']));
+
+  const qCard=el('div','card'); const qb=el('div','card-b');
+  const nm=el('div','q-name'); nm.textContent=cname; qb.appendChild(nm);
+  if(industry){ const sub=el('div','q-sub'); sub.textContent=industry; qb.appendChild(sub); }
+  const row=el('div','q-row');
+  const pr=el('div','q-price'); pr.textContent='₹'+fmt(price); row.appendChild(pr);
+  if(!isNaN(pct)){ const chg=el('div','q-chg '+(pct>=0?'up':'down'));
+    chg.textContent=(pct>=0?'▲ ':'▼ ')+fmt(Math.abs(pct))+'%'; row.appendChild(chg); }
+  const ex=el('div','exch');
+  ex.innerHTML=(isNaN(nse)?'':'NSE ₹'+fmt(nse))+(isNaN(bse)?'':'<br>BSE ₹'+fmt(bse));
+  row.appendChild(ex); qb.appendChild(row); qCard.appendChild(qb); main.appendChild(qCard);
+
+  /* --- technicals (computed) --- */
+  let tScore=50, techNode;
+  if(ohlc && ohlc.length>35){
+    const closes=ohlc.map(o=>o.c);
+    const rv=rsi(closes), mv=macd(closes);
+    const e50=ema(closes,50), e200=ema(closes,Math.min(200,closes.length-1));
+    const st=supertrend(ohlc);
+    const sr=supportResistance(ohlc);
+    const last=closes[closes.length-1];
+    const brk = last>=sr.r*0.995 ? 'BREAKOUT' : (last<=sr.s*1.005 ? 'BREAKDOWN' : '—');
+
+    // scoring
+    let sc=50;
+    if(!isNaN(rv)){ if(rv<30)sc+=10; else if(rv>70)sc-=10; else if(rv>50)sc+=4; else sc-=4; }
+    if(mv){ sc += mv.hist>0?10:-10; }
+    if(last>e50[e50.length-1]) sc+=8; else sc-=8;
+    if(last>e200[e200.length-1]) sc+=8; else sc-=8;
+    if(st){ sc += st.dir>0?10:-10; }
+    if(brk==='BREAKOUT')sc+=6; if(brk==='BREAKDOWN')sc-=6;
+    tScore=Math.max(0,Math.min(100,sc));
+
+    const wrap=el('div');
+    if(ohlc.length>1){ const cv=el('canvas'); wrap.appendChild(cv); setTimeout(()=>drawChart(cv,ohlc),0);
+      const cap=el('div'); cap.style.cssText='font-size:9.5px;color:var(--mute);text-align:right;margin:4px 0 8px;letter-spacing:1px';
+      cap.textContent='1Y PRICE'; wrap.appendChild(cap); }
+
+    const rows=[
+      ['RSI (14)', isNaN(rv)?'—':fmt(rv,1), rv<30?'b-buy':rv>70?'b-sell':'b-neu'],
+      ['MACD', mv?(mv.hist>0?'BULLISH':'BEARISH'):'—', mv?(mv.hist>0?'b-buy':'b-sell'):'b-neu'],
+      ['PRICE vs EMA50', last>e50[e50.length-1]?'ABOVE':'BELOW', last>e50[e50.length-1]?'b-buy':'b-sell'],
+      ['PRICE vs EMA200', last>e200[e200.length-1]?'ABOVE':'BELOW', last>e200[e200.length-1]?'b-buy':'b-sell'],
+      ['SUPERTREND', st?(st.dir>0?'BUY':'SELL'):'—', st?(st.dir>0?'b-buy':'b-sell'):'b-neu'],
+      ['BREAKOUT', brk, brk==='BREAKOUT'?'b-buy':brk==='BREAKDOWN'?'b-sell':'b-neu'],
+    ];
+    rows.forEach(([k,v,cl])=>{ const t=el('div','tline');
+      const a=el('span','tk'); a.textContent=k;
+      const b=el('span','badge '+cl); b.textContent=v;
+      t.appendChild(a); t.appendChild(b); wrap.appendChild(t); });
+    const srLine=el('div','tline');
+    srLine.innerHTML='<span class="tk">SUPPORT / RESISTANCE</span><span class="tv">₹'+fmt(sr.s)+' / ₹'+fmt(sr.r)+'</span>';
+    wrap.appendChild(srLine);
+    techNode=wrap;
+  } else {
+    techNode=el('div'); techNode.style.cssText='font-size:12px;color:var(--mute);line-height:1.6';
+    techNode.textContent='OHLC data nahi mila — technicals compute nahi ho paaye. ⚙ me CORS proxy daal de taaki Yahoo se candles aa sakein.';
+  }
+
+  /* --- verdict (top, uses tScore) --- */
+  const vd=verdictFrom(tScore);
+  const vBox=el('div','verdict');
+  const dot=el('span','v-dot'); dot.style.color=vd.dot; vBox.appendChild(dot);
+  const vt=el('span','v-txt '+vd.cl); vt.textContent=vd.t; vBox.appendChild(vt);
+  const vs=el('span','v-score'); vs.innerHTML='TECH SCORE <b>'+Math.round(tScore)+'</b>/100'; vBox.appendChild(vs);
+  qb.appendChild(vBox);
+
+  main.appendChild(card('TECHNICALS',techNode));
+
+  /* --- fundamentals --- */
+  const pe = pick(data,['keyMetrics.priceandVolume.pe','keyMetrics.valuation.pe','pe','stockDetailsReusableData.pe','keyMetrics.pe']);
+  const pb = pick(data,['keyMetrics.valuation.pb','pb','keyMetrics.pb']);
+  const roe = pick(data,['keyMetrics.profitability.roe','roe','keyMetrics.roe']);
+  const eps = pick(data,['keyMetrics.pershare.eps','eps','stockDetailsReusableData.eps','keyMetrics.eps']);
+  const mcap = pick(data,['keyMetrics.priceandVolume.marketCap','marketCap','stockDetailsReusableData.marketCap']);
+  const debt = pick(data,['keyMetrics.debt.totalDebt','keyMetrics.financialStrength.debtEquity','debtToEquity','keyMetrics.debtEquity']);
+  const fGrid=statGrid([
+    ['P/E', pe!==undefined?fmt(numOf(pe)):'—'],
+    ['P/B', pb!==undefined?fmt(numOf(pb)):'—'],
+    ['ROE %', roe!==undefined?fmt(numOf(roe)):'—'],
+    ['EPS', eps!==undefined?fmt(numOf(eps)):'—'],
+    ['52W HIGH', isNaN(yh)?'—':'₹'+fmt(yh)],
+    ['52W LOW', isNaN(yl)?'—':'₹'+fmt(yl)],
+  ],true);
+  main.appendChild(card('FUNDAMENTALS',fGrid));
+
+  /* --- holding --- */
+  const prom = pick(data,['shareholding.promoter','promoterHolding','shareholdingPattern.promoter','stockDetailsReusableData.promoterHolding']);
+  const fii = pick(data,['shareholding.fii','shareholding.foreign','fiiHolding']);
+  const dii = pick(data,['shareholding.dii','shareholding.domestic','diiHolding']);
+  const pub = pick(data,['shareholding.public','publicHolding']);
+  if(prom!==undefined||fii!==undefined||dii!==undefined){
+    const hGrid=statGrid([
+      ['PROMOTER %', prom!==undefined?fmt(numOf(prom)):'—'],
+      ['FII %', fii!==undefined?fmt(numOf(fii)):'—'],
+      ['DII %', dii!==undefined?fmt(numOf(dii)):'—'],
+      ['PUBLIC %', pub!==undefined?fmt(numOf(pub)):'—'],
+    ]);
+    main.appendChild(card('SHAREHOLDING',hGrid));
+  }
+
+  /* --- news --- */
+  const news = pick(data,['recentNews','news','stockNews']) || [];
+  const newsNode=el('div');
+  if(Array.isArray(news) && news.length){
+    news.slice(0,6).forEach(n=>{
+      const item=el('div','news-item');
+      const head=el('div','nh');
+      const title=(n.headline||n.title||n.head||'').toString();
+      const link=n.url||n.link;
+      head.innerHTML = link?('<a href="'+link+'" target="_blank" rel="noopener">'+title+'</a>'):title;
+      item.appendChild(head);
+      const meta=el('div','nm');
+      const badge=el('span','badge b-neu'); badge.textContent='…'; badge.dataset.t=title; meta.appendChild(badge);
+      if(n.date||n.pubDate){ const d=el('span','nd'); d.textContent=(n.date||n.pubDate); meta.appendChild(d); }
+      item.appendChild(meta); newsNode.appendChild(item);
+    });
+    main.appendChild(card('NEWS',newsNode));
+    tagNews(newsNode, cname); // async sentiment via Gemini
+  }
+
+  /* --- AI summary --- */
+  const aiCard=el('div','card');
+  aiCard.innerHTML='<div class="card-h"><span class="lbl">AI ANALYSIS</span></div>';
+  const aiBody=el('div','card-b');
+  const aiTxt=el('div','ai-box'); aiTxt.textContent = get(LS.gem)?'AI soch raha hai…':'Gemini key daal (⚙) toh AI summary yahan aayegi.';
+  aiBody.appendChild(aiTxt); aiCard.appendChild(aiBody); main.appendChild(aiCard);
+  if(get(LS.gem)) aiSummary(aiTxt, cname, {price,pct,pe,pb,roe,eps,prom,tScore,verdict:vd.t});
+
+  /* --- raw --- */
+  const rawWrap=el('div');
+  const det=el('details'); const sum=el('summary'); sum.textContent='▸ RAW API DATA (debug)';
+  const pre=el('div','raw'); pre.textContent=JSON.stringify(data,null,1).slice(0,4000);
+  det.appendChild(sum); det.appendChild(pre); rawWrap.appendChild(det);
+  main.appendChild(card('DEBUG',rawWrap));
+
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* news sentiment */
+async function tagNews(node, cname){
+  const badges=[...node.querySelectorAll('.badge')];
+  const titles=badges.map(b=>b.dataset.t);
+  const prompt=`For each numbered headline about "${cname}" stock, reply with ONLY the number and one word: POSITIVE, NEGATIVE, or NEUTRAL (impact on share price). No other text.\n`+
+    titles.map((t,i)=>`${i+1}. ${t}`).join('\n');
+  const res=await gemini(prompt);
+  if(!res){ badges.forEach(b=>{b.className='badge b-neu';b.textContent='NEUTRAL';}); return; }
+  const lines=res.split('\n');
+  badges.forEach((b,i)=>{
+    const line=lines.find(l=>l.trim().startsWith((i+1)+'.')||l.trim().startsWith((i+1)+')'))||lines[i]||'';
+    const up=line.toUpperCase();
+    if(up.includes('POSITIVE')){b.className='badge b-buy';b.textContent='POSITIVE';}
+    else if(up.includes('NEGATIVE')){b.className='badge b-sell';b.textContent='NEGATIVE';}
+    else {b.className='badge b-neu';b.textContent='NEUTRAL';}
+  });
+}
+
+/* AI summary */
+async function aiSummary(node, cname, d){
+  const prompt=`You are a stock analytics assistant for the OWNER'S PERSONAL research (not advice to others). Analyze ${cname}.
+Data: Price ₹${fmt(d.price)}, Day ${fmt(d.pct)}%, P/E ${d.pe??'NA'}, P/B ${d.pb??'NA'}, ROE ${d.roe??'NA'}, EPS ${d.eps??'NA'}, Promoter ${d.prom??'NA'}%, computed Technical Score ${Math.round(d.tScore)}/100 (${d.verdict}).
+Write a tight 5-6 line analytics note in HINGLISH (Hindi-English mix). Cover: what technicals + fundamentals are signalling, key strength, key risk, and what to watch. Frame as observations/signals, NOT as "buy/sell" advice. Wrap the single most important phrase in *asterisks*.`;
+  const res=await gemini(prompt);
+  if(!res){ node.textContent='AI summary nahi aa paayi (key/limit check kar). Baaki analysis upar hai.'; return; }
+  node.innerHTML = res.replace(/\*(.+?)\*/g,'<em>$1</em>').trim();
+}
+
+/* wire up */
+$('#go').onclick=run;
+$('#q').addEventListener('keydown',e=>{ if(e.key==='Enter') run(); });
+
+/* ---------- PWA install ---------- */
+// register service worker
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{ navigator.serviceWorker.register('sw.js').catch(()=>{}); });
+}
+// Chrome/Edge/Android install prompt
+let deferredPrompt=null;
+const installBtn=$('#installBtn');
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault(); deferredPrompt=e; installBtn.classList.add('on');
+});
+installBtn.onclick=async()=>{
+  if(!deferredPrompt) return;
+  deferredPrompt.prompt();
+  await deferredPrompt.userChoice;
+  deferredPrompt=null; installBtn.classList.remove('on');
+};
+window.addEventListener('appinstalled',()=>{ installBtn.classList.remove('on'); deferredPrompt=null; });
+
+// iOS Safari: no beforeinstallprompt — show manual hint once
+(function(){
+  const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
+  const standalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
+  if(isIOS && !standalone && !localStorage.getItem('sg_ios_hint')){
+    setTimeout(()=>$('#iosHint').classList.add('on'),900);
+  }
+})();
+$('#iosX').onclick=()=>{ $('#iosHint').classList.remove('on'); localStorage.setItem('sg_ios_hint','1'); };
+
+/* first-run: open settings if no key */
+if(!get(LS.stock)) setTimeout(openSheet,400);
+</script>
+</body>
+</html>
