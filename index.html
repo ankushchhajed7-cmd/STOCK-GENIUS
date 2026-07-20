@@ -150,6 +150,45 @@
   .sheet .save{width:100%;background:var(--amber);color:#000;border:0;font-family:var(--mono);
     font-weight:700;padding:13px;border-radius:9px;letter-spacing:1px;margin-top:4px;font-size:14px}
   .sheet .save:active{background:var(--amber-dim)}
+
+  /* tabs */
+  .tabs{display:flex;gap:6px;margin-top:10px}
+  .tab{flex:1;background:var(--panel);border:1px solid var(--line);color:var(--mute);
+    font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:1px;padding:9px;border-radius:8px;cursor:pointer}
+  .tab.active{background:#1c1710;color:var(--amber);border-color:var(--amber-dim)}
+  /* watchlist */
+  .wl-top{padding:14px 14px 0}
+  .usagepill{display:inline-block;font-size:10px;color:var(--mute);letter-spacing:1px;border:1px solid var(--line);
+    padding:3px 9px;border-radius:20px;margin-bottom:10px}
+  .usagepill b{color:var(--amber)}
+  .wl-add{display:flex;gap:8px;margin-bottom:8px}
+  .wl-add input{flex:1;background:#000;border:1px solid var(--line);color:var(--amber);font-family:var(--mono);
+    font-size:14px;padding:9px 11px;border-radius:8px;text-transform:uppercase;letter-spacing:1px;outline:none}
+  .wl-add input:focus{border-color:var(--amber-dim)}
+  .wl-add input::placeholder{letter-spacing:0;text-transform:none;color:#4a453a}
+  .wl-add button{background:var(--amber);color:#000;border:0;font-weight:700;font-size:18px;padding:0 16px;border-radius:8px;font-family:var(--mono);cursor:pointer}
+  .wl-refresh{width:100%;background:transparent;color:var(--amber);border:1px solid var(--amber-dim);
+    font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:1px;padding:10px;border-radius:8px;margin-bottom:12px;cursor:pointer}
+  .wl-refresh:active{background:var(--amber);color:#000}
+  .wl-refresh:disabled{opacity:.55}
+  .wl-empty{color:var(--mute);font-size:12.5px;text-align:center;padding:36px 24px;line-height:1.9}
+  .wl-card{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);
+    border-radius:10px;padding:11px 12px;margin:0 14px 8px}
+  .wl-card:active{border-color:var(--amber-dim)}
+  .wl-sig{width:7px;height:36px;border-radius:3px;flex:none}
+  .wl-main{flex:1;min-width:0}
+  .wl-sym{font-size:14px;font-weight:700;color:var(--ink);letter-spacing:.5px}
+  .wl-nm{font-size:10px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+  .wl-right{text-align:right}
+  .wl-price{font-size:14px;font-weight:700;color:var(--amber)}
+  .wl-pct{font-size:11px;font-weight:700;margin-top:1px}
+  .wl-x{color:#5a5346;font-size:16px;padding:2px 5px;cursor:pointer}
+  .wl-x:active{color:var(--red)}
+  .wl-ts{font-size:9px;color:#5a5346;text-align:center;letter-spacing:1px;padding:2px 0 16px}
+  /* inline add-to-watchlist button in analyzer */
+  .wl-inline-btn{margin-top:11px;background:transparent;border:1px solid var(--amber-dim);color:var(--amber);
+    font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:1px;padding:8px 13px;border-radius:7px;cursor:pointer}
+  .wl-inline-btn:active{background:var(--amber);color:#000}
 </style>
 </head>
 <body>
@@ -166,12 +205,20 @@
     <span class="x" id="iosX">✕</span>
     Install karne ke liye: <b>Share</b> ⎋ dabaa → <b>Add to Home Screen</b>.
   </div>
+  <div class="tabs">
+    <button class="tab active" id="tabAnalyze">⌕ ANALYZE</button>
+    <button class="tab" id="tabWatch">★ WATCHLIST</button>
+  </div>
+  <div id="searchWrap">
   <div class="searchbar">
     <input id="q" placeholder="Symbol ya naam (RELIANCE)" autocomplete="off" autocapitalize="characters" spellcheck="false">
     <button id="go">SCAN</button>
   </div>
   <div class="chips" id="chips"></div>
+  </div>
 </header>
+
+<div id="watchview" style="display:none"></div>
 
 <main id="main">
   <div class="hint">
@@ -260,6 +307,7 @@ async function apiStock(name){
   if(!key) throw new Error('indianapi.in key nahi hai. ⚙ me daal de.');
   const url=`${STOCK_BASE}/stock?name=${encodeURIComponent(name)}`;
   const r=await fetch(url,{headers:{'X-Api-Key':key}});
+  bumpUsage(1);
   if(r.status===401||r.status===403) throw new Error('API key galat ya plan me ye endpoint allowed nahi.');
   if(r.status===429) throw new Error('Rate limit / credits khatam (429). Thodi der baad try kar.');
   if(!r.ok) throw new Error('Stock API error: HTTP '+r.status);
@@ -270,6 +318,7 @@ async function apiHistorical(name){
   const url=`${STOCK_BASE}/historical_data?stock_name=${encodeURIComponent(name)}&period=1yr&filter=price`;
   try{
     const r=await fetch(url,{headers:{'X-Api-Key':key}});
+    bumpUsage(1);
     if(!r.ok) return null;
     const j=await r.json();
     // try to find an array of {date, price/value}
@@ -389,19 +438,26 @@ function drawChart(canvas,pts){
 }
 
 /* ---------- Gemini ---------- */
+let lastGemErr='';
 async function gemini(prompt){
-  const key=get(LS.gem); if(!key) return null;
+  const key=get(LS.gem); if(!key){ lastGemErr='no key'; return null; }
+  lastGemErr='';
   for(const model of GEM_MODELS){
     try{
       const url=`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
       const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({contents:[{parts:[{text:prompt}]}]})});
-      if(r.status===429||r.status===503) continue;
-      if(!r.ok) continue;
+      if(!r.ok){
+        let msg=''; try{ const ej=await r.json(); msg=ej?.error?.message||''; }catch(_){}
+        lastGemErr=`${model}: HTTP ${r.status}${msg?' — '+msg.slice(0,90):''}`;
+        if(r.status===429||r.status===503||r.status===404||r.status===400||r.status===403) continue;
+        continue;
+      }
       const j=await r.json();
       const t=(j?.candidates?.[0]?.content?.parts||[]).filter(p=>p&&p.text).map(p=>p.text).join('')||'';
       if(t) return t;
-    }catch(e){ continue; }
+      lastGemErr=`${model}: empty response`;
+    }catch(e){ lastGemErr=`${model}: ${e.message}`; continue; }
   }
   return null;
 }
@@ -510,6 +566,12 @@ function render(name,data,ohlc){
   const vs=el('span','v-score'); vs.innerHTML='TECH SCORE <b>'+Math.round(tScore)+'</b>/100'; vBox.appendChild(vs);
   qb.appendChild(vBox);
 
+  const addBtn=el('button','wl-inline-btn');
+  const already=wlGet().some(i=>(i.sym||i)===name.toUpperCase());
+  addBtn.textContent=already?'★ Watchlist me hai':'★ Watchlist me add kar';
+  addBtn.onclick=()=>{ wlAdd(name.toUpperCase(),{price,pct,sc:tScore,name:cname}); addBtn.textContent='★ Added'; };
+  qb.appendChild(addBtn);
+
   main.appendChild(card('TECHNICALS',techNode));
 
   /* --- fundamentals --- */
@@ -606,13 +668,124 @@ async function aiSummary(node, cname, d){
 Data: Price ₹${fmt(d.price)}, Day ${fmt(d.pct)}%, P/E ${d.pe??'NA'}, P/B ${d.pb??'NA'}, ROE ${d.roe??'NA'}, EPS ${d.eps??'NA'}, Promoter ${d.prom??'NA'}%, computed Technical Score ${Math.round(d.tScore)}/100 (${d.verdict}).
 Write a tight 5-6 line analytics note in HINGLISH (Hindi-English mix). Cover: what technicals + fundamentals are signalling, key strength, key risk, and what to watch. Frame as observations/signals, NOT as "buy/sell" advice. Wrap the single most important phrase in *asterisks*.`;
   const res=await gemini(prompt);
-  if(!res){ node.textContent='AI summary nahi aa paayi (key/limit check kar). Baaki analysis upar hai.'; return; }
+  if(!res){ node.textContent='AI fail → '+(lastGemErr||'unknown')+'. (Gemini key/model check kar.)'; return; }
   node.innerHTML = res.replace(/\*(.+?)\*/g,'<em>$1</em>').trim();
 }
 
 /* wire up */
 $('#go').onclick=run;
 $('#q').addEventListener('keydown',e=>{ if(e.key==='Enter') run(); });
+
+/* ---------- usage estimate (local, approx) ---------- */
+function _usage(){ try{return JSON.parse(localStorage.getItem('sg_usage'))||{};}catch(e){return {};} }
+function usageCount(){ const ym=new Date().toISOString().slice(0,7); const u=_usage(); return u.ym===ym?(u.count||0):0; }
+function bumpUsage(n){ const ym=new Date().toISOString().slice(0,7); let u=_usage(); if(u.ym!==ym) u={ym,count:0}; u.count=(u.count||0)+n; localStorage.setItem('sg_usage',JSON.stringify(u)); paintUsage(); }
+function paintUsage(){ const p=document.getElementById('usagePill'); if(p) p.innerHTML='~ <b>'+usageCount()+'</b> / 500 calls (est · this month)'; }
+
+/* ---------- watchlist store ---------- */
+function wlGet(){ try{return JSON.parse(localStorage.getItem('sg_watchlist'))||[];}catch(e){return [];} }
+function wlSet(a){ localStorage.setItem('sg_watchlist',JSON.stringify(a)); }
+function wlCache(){ try{return JSON.parse(localStorage.getItem('sg_wlcache'))||{};}catch(e){return {};} }
+function wlCacheSet(c){ localStorage.setItem('sg_wlcache',JSON.stringify(c)); }
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+
+/* quick read from ONE /stock call (no OHLC → no extra call) */
+function quickSignal(data){
+  const nse=numOf(pick(data,['currentPrice.NSE','currentPrice.nse','stockDetailsReusableData.price','price']));
+  const bse=numOf(pick(data,['currentPrice.BSE','currentPrice.bse']));
+  const price=!isNaN(nse)?nse:bse;
+  const pct=numOf(pick(data,['percentChange','stockDetailsReusableData.percentChange','pChange']));
+  const yh=numOf(pick(data,['yearHigh','stockDetailsReusableData.yearHigh']));
+  const yl=numOf(pick(data,['yearLow','stockDetailsReusableData.yearLow']));
+  let sc=50;
+  if(!isNaN(pct)) sc += Math.max(-12,Math.min(12,pct*3));
+  if(!isNaN(yh)&&!isNaN(yl)&&yh>yl&&!isNaN(price)) sc += (((price-yl)/(yh-yl))-0.5)*20;
+  const td=pick(data,['stockTechnicalData']);
+  if(Array.isArray(td)&&!isNaN(price)){ let ab=0,tot=0; td.forEach(x=>{const v=numOf(x.nsePrice??x.bsePrice??x.price??x.value); if(!isNaN(v)){tot++; if(price>v)ab++;}}); if(tot) sc += ((ab/tot)-0.5)*20; }
+  sc=Math.max(0,Math.min(100,sc));
+  return {price,pct,sc,name:pick(data,['companyName','company'])||''};
+}
+const sigColor=sc=> sc>=60?'var(--green)':sc<40?'var(--red)':'var(--yellow)';
+const sigLabel=sc=> sc>=60?'BULL':sc<40?'BEAR':'NEUTRAL';
+
+async function quickScan(sym){ return quickSignal(await apiStock(sym)); } // 1 call
+
+/* ---------- watchlist render ---------- */
+function renderWatchlist(){
+  const wv=document.getElementById('watchview');
+  const list=wlGet(), cache=wlCache(), n=list.length;
+  let h='<div class="wl-top">';
+  h+='<span class="usagepill" id="usagePill"></span>';
+  h+='<div class="wl-add"><input id="wlInput" placeholder="Symbol add kar (SBIN)" autocomplete="off" autocapitalize="characters" spellcheck="false"><button id="wlAdd">＋</button></div>';
+  h+='<button class="wl-refresh" id="wlRefresh"'+(n?'':' disabled')+'>↻ REFRESH ALL'+(n?' · '+n+' calls':'')+'</button>';
+  h+='</div>';
+  if(!n){
+    h+='<div class="wl-empty">Watchlist khaali hai.<br>Upar symbol daal ke <b style="color:var(--amber)">＋</b> dabaa,<br>ya kisi stock ko ANALYZE karke <b style="color:var(--amber)">★</b> se add kar.</div>';
+  } else {
+    h+='<div id="wlList">';
+    list.forEach(item=>{
+      const sym=item.sym||item, c=cache[sym]||{}, has=c.price!==undefined&&c.price!==null&&!isNaN(c.price);
+      const col=has?sigColor(c.sc):'var(--line)', pctCl=(c.pct>=0)?'up':'down';
+      h+='<div class="wl-card" data-sym="'+sym+'">';
+      h+='<span class="wl-sig" style="background:'+col+'"></span>';
+      h+='<div class="wl-main"><div class="wl-sym">'+sym+(has?' <span style="font-size:9px;color:'+col+';letter-spacing:1px">'+sigLabel(c.sc)+'</span>':'')+'</div>';
+      h+='<div class="wl-nm">'+(c.name||item.name||'tap → deep scan')+'</div></div>';
+      h+='<div class="wl-right"><div class="wl-price">'+(has?'₹'+fmt(c.price):'—')+'</div>';
+      h+='<div class="wl-pct '+(has?pctCl:'')+'">'+(has&&!isNaN(c.pct)?((c.pct>=0?'▲':'▼')+fmt(Math.abs(c.pct))+'%'):'')+'</div></div>';
+      h+='<span class="wl-x" data-del="'+sym+'">✕</span></div>';
+    });
+    h+='</div>';
+    const times=list.map(i=>{const c=cache[i.sym||i]; return c&&c.ts;}).filter(Boolean);
+    if(times.length){ h+='<div class="wl-ts">Last refresh: '+new Date(Math.max(...times)).toLocaleString('en-IN')+'</div>'; }
+  }
+  wv.innerHTML=h; paintUsage(); wireWatchlist();
+}
+function wireWatchlist(){
+  const add=document.getElementById('wlAdd'), inp=document.getElementById('wlInput');
+  if(add){ add.onclick=()=>{ wlAdd(inp.value); inp.value=''; }; inp.addEventListener('keydown',e=>{ if(e.key==='Enter'){ wlAdd(inp.value); inp.value=''; } }); }
+  const rf=document.getElementById('wlRefresh'); if(rf) rf.onclick=refreshAll;
+  document.querySelectorAll('.wl-card').forEach(card=>card.addEventListener('click',e=>{ if(e.target.dataset.del) return; openDeep(card.dataset.sym); }));
+  document.querySelectorAll('.wl-x').forEach(x=>x.onclick=e=>{ e.stopPropagation(); wlRemove(x.dataset.del); });
+}
+function wlAdd(sym, seed){
+  sym=(sym||'').trim().toUpperCase(); if(!sym) return;
+  const list=wlGet();
+  if(!list.some(i=>(i.sym||i)===sym)){ list.push({sym}); wlSet(list); }
+  if(seed && !isNaN(seed.price)){ const c=wlCache(); c[sym]={price:seed.price,pct:seed.pct,sc:seed.sc,name:seed.name,ts:Date.now()}; wlCacheSet(c); }
+  else { refreshOne(sym); return; } // no seed → 1 quick call
+  renderWatchlist();
+}
+function wlRemove(sym){ wlSet(wlGet().filter(i=>(i.sym||i)!==sym)); const c=wlCache(); delete c[sym]; wlCacheSet(c); renderWatchlist(); }
+async function refreshOne(sym){
+  try{ const q=await quickScan(sym); const c=wlCache(); c[sym]={...q,ts:Date.now()}; wlCacheSet(c); }catch(e){}
+  renderWatchlist();
+}
+let refreshing=false;
+async function refreshAll(){
+  if(refreshing) return; refreshing=true;
+  const list=wlGet(), c=wlCache(), rf=document.getElementById('wlRefresh');
+  for(let i=0;i<list.length;i++){
+    const sym=list[i].sym||list[i];
+    if(rf){ rf.disabled=true; rf.textContent='↻ '+(i+1)+'/'+list.length+' · '+sym+'…'; }
+    try{ const q=await quickScan(sym); c[sym]={...q,ts:Date.now()}; wlCacheSet(c); }catch(e){}
+    if(i<list.length-1) await sleep(1200); // free tier: 1 req/sec
+  }
+  refreshing=false; renderWatchlist();
+}
+function openDeep(sym){ setView('analyze'); $('#q').value=sym; run(); }
+
+/* ---------- tabs ---------- */
+function setView(v){
+  const a=(v==='analyze');
+  $('#main').style.display=a?'':'none';
+  $('#searchWrap').style.display=a?'':'none';
+  $('#watchview').style.display=a?'none':'';
+  $('#tabAnalyze').classList.toggle('active',a);
+  $('#tabWatch').classList.toggle('active',!a);
+  if(!a) renderWatchlist();
+}
+$('#tabAnalyze').onclick=()=>setView('analyze');
+$('#tabWatch').onclick=()=>setView('watch');
 
 /* ---------- PWA install ---------- */
 // register service worker
